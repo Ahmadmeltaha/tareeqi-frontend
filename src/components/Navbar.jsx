@@ -88,7 +88,7 @@ const Navbar = () => {
             <img
               src="/logo.png"
               alt="Tareeqi"
-              className="w-8 h-8 object-contain"
+              className="w-24 h-24 object-contain"
               onError={(e) => {
                 e.target.style.display = "none";
                 e.target.nextSibling.style.display = "block";
