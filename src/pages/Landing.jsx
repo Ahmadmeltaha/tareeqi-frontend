@@ -1,60 +1,66 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   const stats = [
-    { number: '10,000+', label: 'ACTIVE USERS' },
-    { number: '50,000+', label: 'RIDES COMPLETED' },
-    { number: '4.9', label: 'AVERAGE RATING' },
-    { number: '15+', label: 'UNIVERSITIES' },
+    { number: "10,000+", label: "ACTIVE USERS" },
+    { number: "50,000+", label: "RIDES COMPLETED" },
+    { number: "4.9", label: "AVERAGE RATING" },
+    { number: "15+", label: "UNIVERSITIES" },
   ];
 
   const features = [
     {
-      title: 'Cost Effective',
-      description: 'Split transportation costs with fellow students. Save up to 70% on your daily commute expenses.',
+      title: "Cost Effective",
+      description:
+        "Split transportation costs with fellow students. Save up to 70% on your daily commute expenses.",
     },
     {
-      title: 'Environmentally Conscious',
-      description: 'Reduce carbon emissions through shared mobility. Contribute to a sustainable future for Jordan.',
+      title: "Environmentally Conscious",
+      description:
+        "Reduce carbon emissions through shared mobility. Contribute to a sustainable future for Jordan.",
     },
     {
-      title: 'University Verified',
-      description: 'Exclusive access for verified students with .edu.jo email addresses. Enhanced security and trust.',
+      title: "University Verified",
+      description:
+        "Exclusive access for verified students with .edu.jo email addresses. Enhanced security and trust.",
     },
     {
-      title: 'Instant Matching',
-      description: 'Advanced algorithm connects drivers and passengers efficiently. Book rides in seconds.',
+      title: "Instant Matching",
+      description:
+        "Advanced algorithm connects drivers and passengers efficiently. Book rides in seconds.",
     },
     {
-      title: 'Secure Platform',
-      description: 'All users undergo verification. Community-driven rating system ensures quality experiences.',
+      title: "Secure Platform",
+      description:
+        "All users undergo verification. Community-driven rating system ensures quality experiences.",
     },
     {
-      title: 'Intuitive Interface',
-      description: 'Streamlined user experience. Post or find rides with minimal effort and maximum efficiency.',
+      title: "Intuitive Interface",
+      description:
+        "Streamlined user experience. Post or find rides with minimal effort and maximum efficiency.",
     },
   ];
 
   const steps = [
     {
-      number: '01',
-      title: 'Create Account',
-      description: 'Register using your verified university email address',
+      number: "01",
+      title: "Create Account",
+      description: "Register using your verified university email address",
     },
     {
-      number: '02',
-      title: 'Select Role',
-      description: 'Choose driver to offer rides or passenger to find them',
+      number: "02",
+      title: "Select Role",
+      description: "Choose driver to offer rides or passenger to find them",
     },
     {
-      number: '03',
-      title: 'Connect',
-      description: 'Post available rides or search and book instantly',
+      number: "03",
+      title: "Connect",
+      description: "Post available rides or search and book instantly",
     },
     {
-      number: '04',
-      title: 'Travel',
-      description: 'Complete your journey and rate your experience',
+      number: "04",
+      title: "Travel",
+      description: "Complete your journey and rate your experience",
     },
   ];
 
@@ -73,13 +79,14 @@ const Landing = () => {
           <div className="text-center">
             <h1 className="text-6xl md:text-8xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-white via-emerald-100 to-emerald-400 bg-clip-text text-transparent">
-                University Carpooling
+                Share the Ride
               </span>
               <br />
-              <span className="text-white">Reimagined</span>
+              <span className="text-white">Split the Cost</span>
             </h1>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-              Connect with verified students across Jordan. Share rides, reduce costs, and build a sustainable campus community.
+              Connect with verified students across Jordan. Share rides, reduce
+              costs, and build a sustainable campus community.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link to="/register?role=passenger">
@@ -106,7 +113,9 @@ const Landing = () => {
                 <div className="text-5xl font-bold text-transparent bg-gradient-to-r from-white to-emerald-400 bg-clip-text mb-2 group-hover:scale-110 transition-transform">
                   {stat.number}
                 </div>
-                <div className="text-slate-500 font-semibold text-sm tracking-wider">{stat.label}</div>
+                <div className="text-slate-500 font-semibold text-sm tracking-wider">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
@@ -130,28 +139,70 @@ const Landing = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-emerald-600 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
               <div className="relative bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 hover:bg-slate-700/50 hover:border-emerald-500/50 transition-all duration-300 hover:scale-105">
                 <div className="w-16 h-16 bg-emerald-600/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600/30 transition-colors">
-                  <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  <svg
+                    className="w-8 h-8 text-emerald-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-3xl font-bold text-white mb-3">Driver</h3>
-                <p className="text-slate-400 mb-8">Share your commute and split fuel costs with fellow students</p>
+                <p className="text-slate-400 mb-8">
+                  Share your commute and split fuel costs with fellow students
+                </p>
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-start text-slate-300">
-                    <svg className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     <span>Set your own routes and schedules</span>
                   </li>
                   <li className="flex items-start text-slate-300">
-                    <svg className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     <span>Share fuel costs with passengers</span>
                   </li>
                   <li className="flex items-start text-slate-300">
-                    <svg className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     <span>Connect with verified students only</span>
                   </li>
@@ -169,28 +220,72 @@ const Landing = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-emerald-600 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
               <div className="relative bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 hover:bg-slate-700/50 hover:border-emerald-500/50 transition-all duration-300 hover:scale-105">
                 <div className="w-16 h-16 bg-emerald-600/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600/30 transition-colors">
-                  <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <svg
+                    className="w-8 h-8 text-emerald-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
                   </svg>
                 </div>
-                <h3 className="text-3xl font-bold text-white mb-3">Passenger</h3>
-                <p className="text-slate-400 mb-8">Find affordable, reliable transportation to your destination</p>
+                <h3 className="text-3xl font-bold text-white mb-3">
+                  Passenger
+                </h3>
+                <p className="text-slate-400 mb-8">
+                  Find affordable, reliable transportation to your destination
+                </p>
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-start text-slate-300">
-                    <svg className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     <span>Save up to 70% on transportation</span>
                   </li>
                   <li className="flex items-start text-slate-300">
-                    <svg className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     <span>Book rides instantly with one click</span>
                   </li>
                   <li className="flex items-start text-slate-300">
-                    <svg className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5 text-emerald-400 mr-3 mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     <span>Travel safely with rated drivers</span>
                   </li>
@@ -210,9 +305,7 @@ const Landing = () => {
       <section className="py-24 bg-slate-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-white mb-4">
-              How It Works
-            </h2>
+            <h2 className="text-5xl font-bold text-white mb-4">How It Works</h2>
             <div className="w-20 h-1 bg-gradient-to-r from-emerald-600 to-emerald-400 mx-auto mt-6"></div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -222,8 +315,12 @@ const Landing = () => {
                   <div className="flex items-center justify-center w-12 h-12 bg-emerald-600 text-white rounded-full font-bold text-lg mb-6">
                     {step.number}
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
-                  <p className="text-slate-400 leading-relaxed">{step.description}</p>
+                  <h3 className="text-xl font-bold text-white mb-3">
+                    {step.title}
+                  </h3>
+                  <p className="text-slate-400 leading-relaxed">
+                    {step.description}
+                  </p>
                 </div>
                 {index < steps.length - 1 && (
                   <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-slate-700"></div>
@@ -254,8 +351,12 @@ const Landing = () => {
                 <div className="w-12 h-12 bg-emerald-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-emerald-600/30 transition-colors">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                <p className="text-slate-400 leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold text-white mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-slate-400 leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -303,21 +404,50 @@ const Landing = () => {
                 <span className="text-2xl font-bold text-white">Tareeqi</span>
               </div>
               <p className="text-slate-500 leading-relaxed">
-                Professional carpooling platform connecting university students across Jordan.
+                Professional carpooling platform connecting university students
+                across Jordan.
               </p>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Platform</h4>
               <ul className="space-y-2">
-                <li><Link to="/login" className="text-slate-400 hover:text-white transition-colors">Sign In</Link></li>
-                <li><Link to="/register" className="text-slate-400 hover:text-white transition-colors">Register</Link></li>
+                <li>
+                  <Link
+                    to="/login"
+                    className="text-slate-400 hover:text-white transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/register"
+                    className="text-slate-400 hover:text-white transition-colors"
+                  >
+                    Register
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Support</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-slate-400 hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-slate-400 hover:text-white transition-colors">Contact</a></li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-slate-400 hover:text-white transition-colors"
+                  >
+                    Help Center
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-slate-400 hover:text-white transition-colors"
+                  >
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

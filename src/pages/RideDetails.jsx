@@ -139,8 +139,13 @@ const RideDetails = () => {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold text-emerald-400">{ride.price_per_seat} JOD</div>
+              <div className="text-3xl font-bold text-emerald-400">
+                {parseFloat(ride.price_per_seat).toFixed(2)} JOD
+              </div>
               <div className="text-slate-400">per seat</div>
+              {parseFloat(ride.traffic_fee) > 0 && (
+                <div className="text-xs text-yellow-400">Includes peak hour fee</div>
+              )}
             </div>
           </div>
 
@@ -268,7 +273,7 @@ const RideDetails = () => {
                 <div>
                   <label className="block text-sm text-slate-400 mb-1">Total Price</label>
                   <div className="text-2xl font-bold text-emerald-400">
-                    {ride.price_per_seat * bookingSeats} JOD
+                    {(parseFloat(ride.price_per_seat) * bookingSeats).toFixed(2)} JOD
                   </div>
                 </div>
               </div>

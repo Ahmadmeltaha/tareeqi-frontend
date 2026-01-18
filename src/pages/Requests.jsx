@@ -63,6 +63,8 @@ const Requests = () => {
       filtered = requests.filter(r => r.status === 'pending');
     } else if (activeTab === 'confirmed') {
       filtered = requests.filter(r => r.status === 'confirmed');
+    } else if (activeTab === 'completed') {
+      filtered = requests.filter(r => r.status === 'completed');
     } else if (activeTab === 'rejected') {
       filtered = requests.filter(r => r.status === 'cancelled' || r.status === 'rejected');
     }
@@ -82,7 +84,7 @@ const Requests = () => {
 
     setActionLoading(true);
     try {
-      const newStatus = actionModal.action === 'confirm' ? 'confirmed' : 'cancelled';
+      const newStatus = actionModal.action === 'confirm' ? 'confirmed' : 'rejected';
       await bookingAPI.updateBookingStatus(actionModal.booking.id, newStatus);
       await loadRequests();
       setActionModal({ isOpen: false, action: null, booking: null });
@@ -96,6 +98,7 @@ const Requests = () => {
 
   const pendingCount = requests.filter(r => r.status === 'pending').length;
   const confirmedCount = requests.filter(r => r.status === 'confirmed').length;
+  const completedCount = requests.filter(r => r.status === 'completed').length;
   const rejectedCount = requests.filter(r => r.status === 'cancelled' || r.status === 'rejected').length;
 
   return (
@@ -116,7 +119,7 @@ const Requests = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-xl p-4">
             <p className="text-slate-400 text-sm">Pending</p>
             <p className="text-2xl font-bold text-yellow-400 mt-1">{pendingCount}</p>
@@ -124,6 +127,10 @@ const Requests = () => {
           <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-xl p-4">
             <p className="text-slate-400 text-sm">Confirmed</p>
             <p className="text-2xl font-bold text-green-400 mt-1">{confirmedCount}</p>
+          </div>
+          <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-xl p-4">
+            <p className="text-slate-400 text-sm">Completed</p>
+            <p className="text-2xl font-bold text-emerald-400 mt-1">{completedCount}</p>
           </div>
           <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-xl p-4">
             <p className="text-slate-400 text-sm">Rejected</p>
@@ -152,6 +159,16 @@ const Requests = () => {
             }`}
           >
             Confirmed ({confirmedCount})
+          </button>
+          <button
+            onClick={() => setActiveTab('completed')}
+            className={`px-6 py-3 font-medium transition-colors cursor-pointer ${
+              activeTab === 'completed'
+                ? 'text-emerald-400 border-b-2 border-emerald-400'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Completed ({completedCount})
           </button>
           <button
             onClick={() => setActiveTab('rejected')}

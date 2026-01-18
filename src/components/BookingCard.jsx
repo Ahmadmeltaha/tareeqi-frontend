@@ -26,6 +26,8 @@ const BookingCard = ({ booking, userRole = 'passenger', onAction }) => {
         return 'warning';
       case 'cancelled':
         return 'danger';
+      case 'rejected':
+        return 'danger';
       case 'completed':
         return 'info';
       default:
@@ -122,7 +124,7 @@ const BookingCard = ({ booking, userRole = 'passenger', onAction }) => {
           </div>
           <div>
             <p className="text-slate-400 mb-1">Total Price</p>
-            <p className="font-semibold text-emerald-400">{booking.total_price} JOD</p>
+            <p className="font-semibold text-emerald-400">{parseFloat(booking.total_price).toFixed(2)} JOD</p>
           </div>
         </div>
 
@@ -200,6 +202,16 @@ const BookingCard = ({ booking, userRole = 'passenger', onAction }) => {
             >
               Leave a Review
             </Button>
+          </div>
+        )}
+
+        {/* Rejected booking message for passenger */}
+        {booking.status === 'rejected' && userRole === 'passenger' && (
+          <div className="pt-4 border-t border-slate-700">
+            <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 text-center">
+              <p className="text-red-400 font-medium">Your booking request was rejected by the driver</p>
+              <p className="text-slate-400 text-sm mt-1">You can search for other available rides</p>
+            </div>
           </div>
         )}
       </div>

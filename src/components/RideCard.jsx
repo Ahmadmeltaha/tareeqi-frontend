@@ -164,9 +164,12 @@ const RideCard = ({
         {/* Price and Action */}
         <div className="flex items-center justify-between pt-4 border-t border-slate-700">
           <div>
-            <span className="text-3xl font-bold text-emerald-400">{ride.price_per_seat}</span>
+            <span className="text-3xl font-bold text-emerald-400">{parseFloat(ride.price_per_seat).toFixed(2)}</span>
             <span className="text-slate-300"> JOD</span>
             <span className="text-sm text-slate-400 block">per seat</span>
+            {parseFloat(ride.traffic_fee) > 0 && (
+              <span className="text-xs text-yellow-400 block">Includes peak hour fee</span>
+            )}
           </div>
           <div className="flex items-center space-x-2">
             {/* Driver actions for scheduled rides */}

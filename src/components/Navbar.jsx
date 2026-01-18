@@ -11,6 +11,8 @@ const Navbar = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const handleLogout = () => {
+    setIsUserMenuOpen(false);
+    setIsMenuOpen(false);
     logout();
     navigate("/");
   };

@@ -51,6 +51,8 @@ const MyBookings = () => {
       filtered = bookings.filter(booking => booking.status === 'confirmed');
     } else if (activeTab === 'completed') {
       filtered = bookings.filter(booking => booking.status === 'completed');
+    } else if (activeTab === 'rejected') {
+      filtered = bookings.filter(booking => booking.status === 'rejected');
     } else if (activeTab === 'cancelled') {
       filtered = bookings.filter(booking => booking.status === 'cancelled');
     }
@@ -194,6 +196,16 @@ const MyBookings = () => {
             }`}
           >
             Completed ({bookings.filter(b => b.status === 'completed').length})
+          </button>
+          <button
+            onClick={() => setActiveTab('rejected')}
+            className={`px-6 py-3 font-medium transition-colors whitespace-nowrap cursor-pointer ${
+              activeTab === 'rejected'
+                ? 'text-emerald-400 border-b-2 border-emerald-400'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Rejected ({bookings.filter(b => b.status === 'rejected').length})
           </button>
           <button
             onClick={() => setActiveTab('cancelled')}
