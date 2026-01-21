@@ -21,14 +21,16 @@ const RideCard = ({
   };
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    // Parse as UTC to avoid timezone conversion
+    const date = new Date(dateString + 'Z');
+    const options = { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' };
     return date.toLocaleDateString('en-US', options);
   };
 
   const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    // Parse as UTC to avoid timezone conversion
+    const date = new Date(dateString + 'Z');
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
   };
 
   const getDirectionLabel = (direction) => {
