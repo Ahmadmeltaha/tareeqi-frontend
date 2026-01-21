@@ -8,15 +8,21 @@ const BookingCard = ({ booking, userRole = 'passenger', onAction }) => {
   const navigate = useNavigate();
 
   const formatDate = (dateString) => {
-    // Parse as UTC to avoid timezone conversion
-    const date = new Date(dateString + 'Z');
+    if (!dateString) return 'Invalid Date';
+    // Handle both ISO strings and database timestamps
+    const cleanDate = dateString.endsWith('Z') ? dateString : dateString.replace(' ', 'T') + 'Z';
+    const date = new Date(cleanDate);
+    if (isNaN(date.getTime())) return 'Invalid Date';
     const options = { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' };
     return date.toLocaleDateString('en-US', options);
   };
 
   const formatTime = (dateString) => {
-    // Parse as UTC to avoid timezone conversion
-    const date = new Date(dateString + 'Z');
+    if (!dateString) return 'Invalid Date';
+    // Handle both ISO strings and database timestamps
+    const cleanDate = dateString.endsWith('Z') ? dateString : dateString.replace(' ', 'T') + 'Z';
+    const date = new Date(cleanDate);
+    if (isNaN(date.getTime())) return 'Invalid Date';
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
   };
 

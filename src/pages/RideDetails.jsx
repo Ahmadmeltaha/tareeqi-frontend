@@ -152,7 +152,10 @@ const RideDetails = () => {
           <div className="border-t border-slate-700 pt-6 grid grid-cols-2 gap-6">
             <div>
               <div className="text-sm text-slate-400 mb-1">Departure</div>
-              <div className="font-medium text-white">{new Date(ride.departure_time + 'Z').toLocaleString('en-US', { timeZone: 'UTC' })}</div>
+              <div className="font-medium text-white">{(() => {
+                const cleanDate = ride.departure_time.endsWith('Z') ? ride.departure_time : ride.departure_time.replace(' ', 'T') + 'Z';
+                return new Date(cleanDate).toLocaleString('en-US', { timeZone: 'UTC' });
+              })()}</div>
             </div>
             <div>
               <div className="text-sm text-slate-400 mb-1">Available Seats</div>
