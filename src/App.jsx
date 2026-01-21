@@ -17,6 +17,7 @@ import Requests from "./pages/Requests";
 import MyBookings from "./pages/MyBookings";
 import DriverProfile from "./pages/DriverProfile";
 import EditRide from "./pages/EditRide";
+import DriverProfileSetup from "./pages/DriverProfileSetup";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -121,6 +122,14 @@ function AppContent() {
           element={
             <DriverRoute>
               <Requests />
+            </DriverRoute>
+          }
+        />
+        <Route
+          path="/driver/profile/setup"
+          element={
+            <DriverRoute>
+              <DriverProfileSetup />
             </DriverRoute>
           }
         />

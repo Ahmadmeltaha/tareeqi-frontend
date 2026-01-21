@@ -50,7 +50,13 @@ const Register = () => {
     const result = await registerUser(registerData);
 
     if (result.success) {
-      navigate(registerData.role === 'driver' ? '/driver/dashboard' : '/passenger/dashboard');
+      // Use the role from the form data (what user selected)
+      const userRole = result.user?.role || registerData.role;
+      if (userRole === 'driver' || userRole === 'both') {
+        navigate('/driver/dashboard');
+      } else {
+        navigate('/passenger/dashboard');
+      }
     } else {
       setError(result.message);
     }

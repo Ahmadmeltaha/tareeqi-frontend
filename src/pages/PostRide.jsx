@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { rideAPI, universityAPI } from '../services/api';
+import { rideAPI, universityAPI, driverAPI } from '../services/api';
 import LocationAutocomplete from '../components/LocationAutocomplete';
 import RouteMap from '../components/RouteMap';
 
@@ -55,10 +55,22 @@ const PostRide = () => {
   const [trafficData, setTrafficData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [checkingProfile, setCheckingProfile] = useState(true);
 
   useEffect(() => {
+    checkDriverProfile();
     fetchUniversities();
   }, []);
+
+  const checkDriverProfile = async () => {
+    try {
+      await driverAPI.getProfile(user.id);
+      setCheckingProfile(false);
+    } catch (error) {
+      // No driver profile exists, redirect to setup
+      navigate('/driver/profile/setup');
+    }
+  };
 
   const fetchUniversities = async () => {
     try {
@@ -418,6 +430,14 @@ const PostRide = () => {
       setLoading(false);
     }
   };
+
+  if (checkingProfile) {
+    return (
+      <div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 pt-20">

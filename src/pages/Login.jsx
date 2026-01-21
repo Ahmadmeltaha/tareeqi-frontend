@@ -19,7 +19,9 @@ const Login = () => {
     const result = await login(formData.email, formData.password);
 
     if (result.success) {
-      if (isDriver()) {
+      // Use the returned user data, not the context state (which hasn't updated yet)
+      const userRole = result.user?.role;
+      if (userRole === 'driver' || userRole === 'both') {
         navigate('/driver/dashboard');
       } else {
         navigate('/passenger/dashboard');
