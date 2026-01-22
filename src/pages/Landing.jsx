@@ -430,7 +430,7 @@ const Landing = () => {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div className="md:col-span-2">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-emerald-600 rounded-lg"></div>
+                <img src="/logo.png" alt="Tareeqi" className="w-8 h-8 object-contain" />
                 <span className="text-2xl font-bold text-white">Tareeqi</span>
               </div>
               <p className="text-slate-500 leading-relaxed">
