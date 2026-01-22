@@ -7,13 +7,26 @@ import RouteMap from '../components/RouteMap';
 import Button from '../components/Button';
 import LoadingSpinner from '../components/LoadingSpinner';
 
+// Fuel rates in JOD per km (matching PostRide.jsx)
 const FUEL_RATES = {
-  petrol: 0.15,
-  hybrid: 0.10,
-  electric: 0.06
+  petrol: 0.10,
+  hybrid: 0.06,
+  electric: 0.03
 };
 
 const AC_MULTIPLIER = 1.10;
+const PEAK_HOUR_FEE_PER_KM = 0.05; // 0.05 JOD per km during peak hours (7-9 AM, 4-6 PM)
+
+// Check if departure time is during peak traffic hours in Jordan
+const isPeakHour = (departureTime) => {
+  if (!departureTime) return false;
+  const timePart = departureTime.split('T')[1];
+  if (!timePart) return false;
+  const hour = parseInt(timePart.split(':')[0], 10);
+  const isMorningPeak = hour >= 7 && hour < 9;
+  const isAfternoonPeak = hour >= 16 && hour < 18;
+  return isMorningPeak || isAfternoonPeak;
+};
 
 const EditRide = () => {
   const { id } = useParams();
@@ -40,6 +53,7 @@ const EditRide = () => {
 
   const [universities, setUniversities] = useState([]);
   const [priceBreakdown, setPriceBreakdown] = useState(null);
+  const [trafficData, setTrafficData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -114,7 +128,7 @@ const EditRide = () => {
     }
   };
 
-  const calculatePrice = (distance, fuelType, seats, acEnabled, trafficInfo) => {
+  const calculatePrice = (distance, fuelType, seats, acEnabled, trafficInfo, departureTime) => {
     if (!distance || !seats || parseInt(seats) === 0) return { pricePerSeat: 0, totalCost: 0, breakdown: null };
 
     const rate = FUEL_RATES[fuelType] || FUEL_RATES.petrol;
@@ -143,9 +157,14 @@ const EditRide = () => {
       }
     }
 
+    // Calculate peak hour fee (7-9 AM and 4-6 PM)
+    const isPeak = isPeakHour(departureTime);
+    const peakHourFee = isPeak ? parseFloat(distance) * PEAK_HOUR_FEE_PER_KM : 0;
+
     const acMultiplier = acEnabled ? AC_MULTIPLIER : 1;
     const costWithAC = baseCost * acMultiplier;
-    const totalCost = costWithAC * trafficMultiplier;
+    const costWithTraffic = costWithAC * trafficMultiplier;
+    const totalCost = costWithTraffic + peakHourFee;
     const pricePerSeat = totalCost / parseInt(seats);
 
     return {
@@ -162,46 +181,146 @@ const EditRide = () => {
         baseCost: Math.round(baseCost * 100) / 100,
         costWithAC: Math.round(costWithAC * 100) / 100,
         trafficCost: Math.round((costWithAC * trafficMultiplier) - costWithAC, 2),
+        isPeakHour: isPeak,
+        peakHourFee: Math.round(peakHourFee * 100) / 100,
         seats: parseInt(seats)
       }
     };
   };
 
-  const updatePriceCalculation = (newFormData) => {
+  const updatePriceCalculation = (newFormData, trafficInfo = trafficData) => {
     const result = calculatePrice(
       newFormData.distance_km,
       newFormData.fuel_type,
       newFormData.available_seats,
       newFormData.ac_enabled,
-      null
+      trafficInfo,
+      newFormData.departure_time
     );
     setPriceBreakdown(result.breakdown ? result : null);
     return result.pricePerSeat;
   };
 
-  const handleOriginSelect = (location) => {
+  // Calculate distance using Google Maps Distance Matrix API with traffic data
+  const calculateDistance = async (originLat, originLng, destLat, destLng, departureTime) => {
+    if (!originLat || !originLng || !destLat || !destLng) return { distance: 0, trafficData: null };
+
+    // Try to use Google Maps Distance Matrix API with traffic data
+    if (window.google && window.google.maps) {
+      try {
+        const service = new window.google.maps.DistanceMatrixService();
+
+        // Prepare request with traffic model
+        const request = {
+          origins: [{ lat: parseFloat(originLat), lng: parseFloat(originLng) }],
+          destinations: [{ lat: parseFloat(destLat), lng: parseFloat(destLng) }],
+          travelMode: window.google.maps.TravelMode.DRIVING,
+          drivingOptions: {
+            departureTime: departureTime ? new Date(departureTime) : new Date(),
+            trafficModel: window.google.maps.TrafficModel.BEST_GUESS
+          }
+        };
+
+        const result = await new Promise((resolve, reject) => {
+          service.getDistanceMatrix(request, (response, status) => {
+            if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
+              resolve(response);
+            } else {
+              reject(new Error('Distance calculation failed'));
+            }
+          });
+        });
+
+        const element = result.rows[0].elements[0];
+        const distanceInMeters = element.distance.value;
+        const distanceInKm = distanceInMeters / 1000;
+
+        // Extract traffic data
+        const traffic = {
+          duration: element.duration.value, // seconds without traffic
+          duration_in_traffic: element.duration_in_traffic?.value || element.duration.value // seconds with traffic
+        };
+
+        setTrafficData(traffic);
+        return {
+          distance: Math.round(distanceInKm * 10) / 10,
+          trafficData: traffic
+        };
+      } catch (error) {
+        console.log('Google Maps Distance Matrix failed, using Haversine formula');
+      }
+    }
+
+    // Fallback to Haversine formula if Google Maps is not available
+    const R = 6371; // Earth's radius in km
+    const dLat = (destLat - originLat) * Math.PI / 180;
+    const dLon = (destLng - originLng) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(originLat * Math.PI / 180) * Math.cos(destLat * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return {
+      distance: Math.round(distance * 10) / 10,
+      trafficData: null
+    };
+  };
+
+  const handleOriginSelect = async (location) => {
     const newFormData = {
       ...formData,
       origin: location.address,
       origin_lat: location.lat,
       origin_lng: location.lng,
     };
-    setFormData(newFormData);
-    updatePriceCalculation(newFormData);
+
+    // Auto-calculate distance if destination is set
+    if (formData.destination_lat && formData.destination_lng) {
+      const result = await calculateDistance(
+        location.lat,
+        location.lng,
+        formData.destination_lat,
+        formData.destination_lng,
+        formData.departure_time
+      );
+      newFormData.distance_km = result.distance.toString();
+      setFormData(newFormData);
+      updatePriceCalculation(newFormData, result.trafficData);
+    } else {
+      setFormData(newFormData);
+      updatePriceCalculation(newFormData);
+    }
   };
 
-  const handleDestinationSelect = (location) => {
+  const handleDestinationSelect = async (location) => {
     const newFormData = {
       ...formData,
       destination: location.address,
       destination_lat: location.lat,
       destination_lng: location.lng,
     };
-    setFormData(newFormData);
-    updatePriceCalculation(newFormData);
+
+    // Auto-calculate distance if origin is set
+    if (formData.origin_lat && formData.origin_lng) {
+      const result = await calculateDistance(
+        formData.origin_lat,
+        formData.origin_lng,
+        location.lat,
+        location.lng,
+        formData.departure_time
+      );
+      newFormData.distance_km = result.distance.toString();
+      setFormData(newFormData);
+      updatePriceCalculation(newFormData, result.trafficData);
+    } else {
+      setFormData(newFormData);
+      updatePriceCalculation(newFormData);
+    }
   };
 
-  const handleUniversityChange = (e) => {
+  const handleUniversityChange = async (e) => {
     const universityId = e.target.value;
     const university = universities.find(u => u.id.toString() === universityId);
 
@@ -215,6 +334,20 @@ const EditRide = () => {
           destination_lat: parseFloat(university.latitude),
           destination_lng: parseFloat(university.longitude),
         };
+        // Calculate distance if origin is set
+        if (formData.origin_lat && formData.origin_lng) {
+          const result = await calculateDistance(
+            formData.origin_lat,
+            formData.origin_lng,
+            parseFloat(university.latitude),
+            parseFloat(university.longitude),
+            formData.departure_time
+          );
+          newFormData.distance_km = result.distance.toString();
+          setFormData(newFormData);
+          updatePriceCalculation(newFormData, result.trafficData);
+          return;
+        }
       } else if (formData.direction === 'from_university') {
         newFormData = {
           ...newFormData,
@@ -222,6 +355,20 @@ const EditRide = () => {
           origin_lat: parseFloat(university.latitude),
           origin_lng: parseFloat(university.longitude),
         };
+        // Calculate distance if destination is set
+        if (formData.destination_lat && formData.destination_lng) {
+          const result = await calculateDistance(
+            parseFloat(university.latitude),
+            parseFloat(university.longitude),
+            formData.destination_lat,
+            formData.destination_lng,
+            formData.departure_time
+          );
+          newFormData.distance_km = result.distance.toString();
+          setFormData(newFormData);
+          updatePriceCalculation(newFormData, result.trafficData);
+          return;
+        }
       }
     }
 
@@ -263,13 +410,26 @@ const EditRide = () => {
     updatePriceCalculation(newFormData);
   };
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? checked : value;
     const newFormData = { ...formData, [name]: newValue };
     setFormData(newFormData);
 
-    if (['distance_km', 'fuel_type', 'available_seats', 'ac_enabled'].includes(name)) {
+    // Recalculate traffic data when departure time changes
+    if (name === 'departure_time' && formData.origin_lat && formData.destination_lat) {
+      const result = await calculateDistance(
+        formData.origin_lat,
+        formData.origin_lng,
+        formData.destination_lat,
+        formData.destination_lng,
+        newValue
+      );
+      updatePriceCalculation(newFormData, result.trafficData);
+      return;
+    }
+
+    if (['distance_km', 'fuel_type', 'available_seats', 'ac_enabled', 'departure_time'].includes(name)) {
       updatePriceCalculation(newFormData);
     }
   };
@@ -528,7 +688,14 @@ const EditRide = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Distance (KM)</label>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Distance (KM)
+                {formData.distance_km && formData.origin_lat && formData.destination_lat && (
+                  <span className="ml-2 text-emerald-400 text-sm">
+                    Auto-calculated via Google Maps
+                  </span>
+                )}
+              </label>
               <input
                 type="number"
                 name="distance_km"
@@ -537,7 +704,8 @@ const EditRide = () => {
                 value={formData.distance_km}
                 onChange={handleChange}
                 className="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                placeholder="Enter distance"
+                placeholder="Enter distance or select locations"
+                readOnly={formData.origin_lat && formData.destination_lat}
               />
             </div>
           </div>
