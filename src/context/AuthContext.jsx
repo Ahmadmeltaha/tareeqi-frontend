@@ -73,8 +73,8 @@ export const AuthProvider = ({ children }) => {
     setUser(newUser);
   };
 
-  const isDriver = () => user?.role === 'driver' || user?.role === 'both';
-  const isPassenger = () => user?.role === 'passenger' || user?.role === 'both';
+  const isDriver = () => user?.role === 'driver';
+  const isPassenger = () => user?.role === 'passenger';
   const isAuthenticated = !!user;
 
   return (
