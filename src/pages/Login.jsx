@@ -21,7 +21,7 @@ const Login = () => {
     if (result.success) {
       // Use the returned user data, not the context state (which hasn't updated yet)
       const userRole = result.user?.role;
-      if (userRole === 'driver' || userRole === 'both') {
+      if (userRole === 'driver') {
         navigate('/driver/dashboard');
       } else {
         navigate('/passenger/dashboard');
